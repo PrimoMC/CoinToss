@@ -12,6 +12,6 @@ A simple 1v1 coin toss plugin with monetary bets.
 
 ## Usage
 
-- You challenge someone with /cointoss challenge <player> <bet>
-- The person you challenged gets a notification, and he has to type /cointoss accept <heads|tails>
+- You challenge someone with /cointoss challenge &lt;player&gt; &lt;bet&gt;
+- The person you challenged gets a notification, and he has to type /cointoss accept  &lt;heads/tails&gt;
 - The coin toss will start, and after a second it will end and reward the winning user.
