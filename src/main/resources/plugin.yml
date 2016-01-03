@@ -8,3 +8,4 @@ commands:
   cointoss:
     description: The Coin Toss command
     aliases: [toss, ctoss]
+    permission: cointoss.use
