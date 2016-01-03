@@ -1,0 +1,10 @@
+name: CoinToss
+main: net.primomc.CoinToss.CoinToss
+version: 1.0
+author: kukelekuuk00
+depend: [Vault]
+
+commands:
+  cointoss:
+    description: The Coin Toss command
+    aliases: [toss, ctoss]

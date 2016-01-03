@@ -1,0 +1,34 @@
+#the percentage of money should be taken as tax when people bet against each other
+tax: 0.05
+#the minimum amount of money someone can bet in a single-game
+minbet: 100
+#the maximum amount of money someone can bet in a single-game
+maxbet: 1000
+#How long it takes before a challenge expires in seconds
+expirationtime: 30
+
+# Losslimit is a system that prevents people from betting and losing too much.
+# It could be used to prevent excessive gambling, or it can be used to lower the risk of gambling addiction.
+# Here's how it works:
+# Everyone has a "lossrating"
+# When you lose money your rating goes up by the amount of money you lost.
+# When your rating goes over the max you can no longer bet any more money until a server restart
+# or until your rating goes below a configurable number.
+# Your rating goes down by a configurable amount every configurable amount of minutes.
+# With the default settings your rating will lower by 1000 every 18 minutes.
+# the max limit is 50k, and the min-limit is 10k.
+# Once someone's rating goes over 50k they cannot play any more coin-toss until their rating goes below 10k.
+# At the rate of 1000 every 18 minutes it will take exactly 12 hours to lower your rating by 40k.
+losslimit:
+  enabled: true
+  #The maximum rating. You can't play any more after hitting the max rating.
+  ratingmax: 50000
+  #The minimum rating. After hitting the max you can't play until you're below this.
+  ratingmin: 10000
+  #The rate at which your rating goes down.
+  downrate:
+    #The amount of minutes it takes before your rating goes down.
+    minutes: 18
+    #The amount of rating goes down every X minutes.
+    amount: 1000
+
