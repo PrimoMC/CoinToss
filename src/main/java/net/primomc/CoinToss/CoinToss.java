@@ -153,7 +153,7 @@ public class CoinToss extends JavaPlugin implements CommandExecutor, Listener
 
     private void AcceptCommand( Player player, String[] args )
     {
-        Map<UUID, Triple<UUID, Long, Double>> challengeCopy = this.challenges;
+        Map<UUID, Triple<UUID, Long, Double>> challengeCopy = new HashMap<>( this.challenges );
         for ( UUID key : challengeCopy.keySet() )
         {
             Triple<UUID, Long, Double> challenge = challengeCopy.get( key );
