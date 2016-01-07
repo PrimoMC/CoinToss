@@ -1,6 +1,6 @@
 name: CoinToss
 main: net.primomc.CoinToss.CoinToss
-version: 1.0.1
+version: 1.0.2
 author: kukelekuuk00
 depend: [Vault]
 

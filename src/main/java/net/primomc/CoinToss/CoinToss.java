@@ -127,7 +127,7 @@ public class CoinToss extends JavaPlugin implements CommandExecutor, Listener
 
     private void DenyCommand( Player player, String[] args )
     {
-        Map<UUID, Triple<UUID, Long, Double>> challengeCopy = this.challenges;
+        Map<UUID, Triple<UUID, Long, Double>> challengeCopy = new HashMap<>( this.challenges );
         for ( UUID key : challengeCopy.keySet() )
         {
             Triple<UUID, Long, Double> challenge = challengeCopy.get( key );
@@ -297,7 +297,7 @@ public class CoinToss extends JavaPlugin implements CommandExecutor, Listener
         MsgWrapper.sendMessagePrefix( otherPlayer, "cointossinformation", otherSide, bet + "", taxed + "" );
         MsgWrapper.sendMessagePrefix( new Player[]{ player, otherPlayer }, "startcointoss" );
         bet -= taxed;
-        boolean side = rand.nextBoolean();
+        boolean side = Math.random()<0.5;
         final String winningSideName = side ? "heads" : "tails";
         final Player winner;
         final Player loser;
