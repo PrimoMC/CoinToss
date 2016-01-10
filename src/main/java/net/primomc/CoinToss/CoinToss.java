@@ -317,6 +317,8 @@ public class CoinToss extends JavaPlugin implements CommandExecutor, Listener
             @Override
             public void run()
             {
+                CoinTossEndEvent event = new CoinTossEndEvent(winner, loser, preTax-finalBet, preTax);
+                Bukkit.getPluginManager().callEvent( event );
                 MsgWrapper.sendMessagePrefix( new Player[]{ winner, loser }, "coinside", winningSideName );
                 MsgWrapper.sendMessagePrefix( winner, "youwon" );
                 MsgWrapper.sendMessagePrefix( winner, "moneyadded", ( finalBet * 2 ) + "" );
