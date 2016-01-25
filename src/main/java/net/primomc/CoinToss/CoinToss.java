@@ -287,6 +287,16 @@ public class CoinToss extends JavaPlugin implements CommandExecutor, Listener
     {
         this.challenges.remove( player.getUniqueId() );
         final double preTax = bet;
+        if(!economy.has( player, bet ))
+        {
+            MsgWrapper.sendMessagePrefix( player, "notenoughmoney" );
+            return;
+        }
+        if(!economy.has( otherPlayer, bet ))
+        {
+            MsgWrapper.sendMessagePrefix( otherPlayer, "notenoughmoney" );
+            return;
+        }
         economy.withdrawPlayer( player, bet );
         economy.withdrawPlayer( otherPlayer, bet );
         MsgWrapper.sendMessagePrefix( new Player[]{ player, otherPlayer }, "moneyremoved", bet + "" );
