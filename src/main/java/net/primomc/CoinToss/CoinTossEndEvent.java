@@ -25,11 +25,9 @@ public class CoinTossEndEvent extends Event
     private final Player loser;
     private final double tax;
     private final double bet;
-    private HandlerList handlerlist;
-
+    private static final HandlerList handlers = new HandlerList();
     public CoinTossEndEvent( Player winner, Player loser, double tax, double bet )
     {
-
         this.winner = winner;
         this.loser = loser;
         this.tax = tax;
@@ -75,6 +73,6 @@ public class CoinTossEndEvent extends Event
     @Override
     public HandlerList getHandlers()
     {
-        return handlerlist;
+        return handlers;
     }
 }
