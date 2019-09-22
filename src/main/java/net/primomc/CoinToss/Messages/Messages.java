@@ -5,7 +5,6 @@ import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +29,7 @@ import java.util.regex.Pattern;
  * limitations under the License.
  */
 
+@SuppressWarnings( "ALL" )
 public class Messages
 {
     private static Map<String, String> messages = new HashMap<>();
@@ -53,7 +53,7 @@ public class Messages
         int i = 0;
         for ( String value : values )
         {
-            message = message.replaceAll( "\\{" + i + "\\}", value );
+            message = message.replaceAll( "\\{" + i + "}", value );
             i++;
         }
         message = prefix + message;
@@ -67,11 +67,11 @@ public class Messages
         return message;
     }
 
-    public static BaseComponent[] jsonReplacer( String message )
+    private static BaseComponent[] jsonReplacer( String message )
     {
         message = message.replaceAll( "\\n", "||||" );
         ComponentBuilder jchat = new ComponentBuilder( "" );
-        String regex = "(?i)\\[(hover-text|click-url|click-command|hover-command|hover-url)=(.+)\\](.+)\\[/\\1\\]";
+        String regex = "(?i)\\[(hover-text|click-url|click-command|hover-command|hover-url)=(.+)](.+)\\[/\\1]";
         Pattern pattern = Pattern.compile( regex );
         Matcher matcher = pattern.matcher( message );
         List<String> bbcodes = new ArrayList<>();
@@ -141,12 +141,12 @@ public class Messages
         return msg( message );
     }
 
-    public static String getBasicMessage( boolean hasPrefix, String key, String... values )
+    static String getBasicMessage( boolean hasPrefix, String key, String... values )
     {
         return msg( hasPrefix, key, values );
     }
 
-    public static void sendMessage( Player[] players, String key, String... values )
+    private static void sendMessage( Player[] players, String key, String... values )
     {
         BaseComponent[] jchat = jsonReplacer( msg( true, key, values ) );
         for ( Player player : players )
@@ -155,7 +155,7 @@ public class Messages
         }
     }
 
-    public static void sendMessage( boolean hasPrefix, Player[] players, String key, String... values )
+    static void sendMessage( boolean hasPrefix, Player[] players, String key, String... values )
     {
         BaseComponent[] jchat = jsonReplacer( msg( hasPrefix, key, values ) );
         for ( Player player : players )
@@ -182,7 +182,7 @@ public class Messages
         }
     }
 
-    public static void setMessages( Map<String, String> messages )
+    static void setMessages( Map<String, String> messages )
     {
         Messages.messages = messages;
     }
