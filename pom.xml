@@ -21,6 +21,13 @@
             <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
         </repository>
     </repositories>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>primo-snapshots</id>
+            <name>Snapshots</name>
+            <url>http://test.primomc.net:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
