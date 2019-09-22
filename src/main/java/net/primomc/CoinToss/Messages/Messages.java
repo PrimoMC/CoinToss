@@ -1,7 +1,11 @@
 package net.primomc.CoinToss.Messages;
 
+import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,10 +67,10 @@ public class Messages
         return message;
     }
 
-    public static JChat jsonReplacer( String message )
+    public static BaseComponent[] jsonReplacer( String message )
     {
         message = message.replaceAll( "\\n", "||||" );
-        JChat jchat = new JChat( "" );
+        ComponentBuilder jchat = new ComponentBuilder( "" );
         String regex = "(?i)\\[(hover-text|click-url|click-command|hover-command|hover-url)=(.+)\\](.+)\\[/\\1\\]";
         Pattern pattern = Pattern.compile( regex );
         Matcher matcher = pattern.matcher( message );
@@ -81,32 +85,32 @@ public class Messages
             for ( String bbcode : bbcodes )
             {
                 String[] split = remainder.split( Pattern.quote( bbcode ), 2 );
-                jchat.then( split[0] );
+                jchat.append( split[0] );
                 if ( split.length == 2 )
                 {
                     remainder = split[1];
                 }
                 String param = bbcode.replaceFirst( regex, "$2" ).replaceAll( "\\|\\|\\|\\|", "\n" );
                 String text = bbcode.replaceFirst( regex, "$3" ).replaceAll( "\\|\\|\\|\\|", "\n" );
-                jchat.then( text );
+                jchat.append( text );
                 if ( bbcode.toLowerCase().contains( "[click-command=" ) )
                 {
-                    jchat.command( param );
+                    jchat.event( new ClickEvent( ClickEvent.Action.RUN_COMMAND, param ) );
                 }
                 else if ( bbcode.toLowerCase().contains( "[click-url=" ) )
                 {
-                    jchat.link( param );
+                    jchat.event( new ClickEvent( ClickEvent.Action.OPEN_URL, param ) );
                 }
                 else if ( bbcode.toLowerCase().contains( "[hover-text=" ) )
                 {
-                    jchat.tooltip( param );
+                    jchat.event( new HoverEvent( HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText( param ) ) );
                 }
                 else if ( bbcode.toLowerCase().contains( "[hover-command=" ) )
                 {
                     String[] params = param.split( "====" );
                     if ( params.length == 2 )
                     {
-                        jchat.tooltip( params[0] ).command( params[1] );
+                        jchat.event( new HoverEvent( HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText( params[0] ) ) ).event( new ClickEvent( ClickEvent.Action.RUN_COMMAND, params[1] ) );
                     }
                 }
                 else if ( bbcode.toLowerCase().contains( "[hover-url=" ) )
@@ -114,22 +118,22 @@ public class Messages
                     String[] params = param.split( "====" );
                     if ( params.length == 2 )
                     {
-                        jchat.tooltip( params[0] ).link( params[1] );
+                        jchat.event( new HoverEvent( HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText( params[0] ) ) ).event( new ClickEvent( ClickEvent.Action.OPEN_URL, params[1] ) );
                     }
                 }
             }
-            jchat.then( remainder );
+            jchat.append( remainder );
         }
         else
         {
-            jchat = jchat.then( message.replaceAll( "\\|\\|\\|\\|", "\n" ) );
+            jchat = jchat.append( message.replaceAll( "\\|\\|\\|\\|", "\n" ) );
         }
-        return jchat;
+        return jchat.create();
     }
 
     public static String getMessageJson( String key, String... values )
     {
-        return jsonReplacer( msg( false, key, values ) ).toJSONString();
+        return ComponentSerializer.toString( jsonReplacer( msg( false, key, values ) ) );
     }
 
     public static String getBasicMessage( String message )
@@ -144,31 +148,37 @@ public class Messages
 
     public static void sendMessage( Player[] players, String key, String... values )
     {
-        JChat jchat = jsonReplacer( msg( true, key, values ) );
+        BaseComponent[] jchat = jsonReplacer( msg( true, key, values ) );
         for ( Player player : players )
         {
-            try
-            {
-                jchat.send( player );
-            }
-            catch ( Exception ignored )
-            {
-            }
+            player.spigot().sendMessage( jchat );
         }
     }
 
     public static void sendMessage( boolean hasPrefix, Player[] players, String key, String... values )
     {
-        JChat jchat = jsonReplacer( msg( hasPrefix, key, values ) );
+        BaseComponent[] jchat = jsonReplacer( msg( hasPrefix, key, values ) );
         for ( Player player : players )
         {
-            try
-            {
-                jchat.send( player );
-            }
-            catch ( Exception ignored )
-            {
-            }
+            player.spigot().sendMessage( jchat );
+
+        }
+    }
+
+    public static void sendMessage( Player player, String key, String[] values )
+    {
+        sendMessage( new Player[]{ player }, key, values );
+    }
+
+    public static void sendMessage( CommandSender sender, String key, String[] values )
+    {
+        if ( sender instanceof Player )
+        {
+            sendMessage( new Player[]{ (Player) sender }, key, values );
+        }
+        else
+        {
+            sender.sendMessage( msg( true, key, values ) );
         }
     }
 
